@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import { WaitingRoomProps } from "../types";
 
 // joinChatRoom: (roomId: string) => Promise<void>;
-
-export type WaitingRoomProps = {
-  joinChatRoom: (username: string, chatroom: string) => Promise<void>;
-};
-
 export const WaitingRoom: React.FC<WaitingRoomProps> = ({ joinChatRoom }) => {
   const [username, setUsername] = useState<string>('');
   const [chatroom, setChatroom] = useState<string>('');
