@@ -11,13 +11,15 @@ export const MessageContainer: React.FC<MessageContainerProps> = (props) => {
   return (
     <div>
       <Table striped>
-        {messages.map((msg, index) => (
-          <tr key={index}>
-            <td>
-              <strong>{msg.user}:</strong> {msg.message}
-            </td>
-          </tr>
-        ))}
+        <tbody>
+          {messages.map((msg, index) => (
+            <tr key={index}>
+              <td>
+                <strong>{msg.user}:</strong> {msg.message}
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     </div>
   );

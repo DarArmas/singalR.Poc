@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { ChatRoom, WaitingRoom } from "./components";
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useState } from "react";
-import { Message, WaitingRoomProps } from "./types";
+import { ChatRoomProps, Message, WaitingRoomProps } from "./types";
 
 const App: React.FC = () => {
   const [connection, setConnection] = useState<HubConnection>();
@@ -27,7 +27,6 @@ const App: React.FC = () => {
 
         //Aqui importa el orden de los argumentos, literalmente es un spread del lado del server
         connection.on("ReceiveSpecificMessage", (username: string, msg: string) => {
-            debugger;
             const receivedMessage: Message = {user: username, message: msg};
             setMessages(prevMessages => [...prevMessages, receivedMessage])
         })
@@ -41,8 +40,21 @@ const App: React.FC = () => {
     }
   };
 
+  const sendMessage = async (message:string): Promise<void> => {
+    try{
+      await connection?.invoke("SendMessage", message);
+    }catch (error){
+      console.error(error);
+    }
+  }
+
   const waitingRoomProps: WaitingRoomProps = {
     joinChatRoom,
+  };
+
+  const chatRoomProps: ChatRoomProps = {
+    messages,
+    sendMessage,
   };
 
   return (
@@ -55,7 +67,7 @@ const App: React.FC = () => {
                 <h1 className="font-weight-light">Welcome to my chat</h1>
               </Col>
             </Row>
-            {! connection ?  <WaitingRoom {...waitingRoomProps} /> : <ChatRoom messages={messages} />}
+            {! connection ?  <WaitingRoom {...waitingRoomProps} /> : <ChatRoom {...chatRoomProps} />}
            
           </Container>
         </main>
